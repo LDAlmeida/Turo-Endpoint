@@ -43,7 +43,7 @@ def requires_auth(f):
         return f(*args, **kwargs)
     return decorated
 
-@app.route('/webhook', methods=['POST'])
+@app.route('/assignments', methods=['POST'])
 @requires_auth
 def webhook():
     if request.is_json:
