@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from functools import wraps
+import logging
+import sys
 import config
 
 app = Flask(__name__)
@@ -10,6 +12,14 @@ db = SQLAlchemy(app)
 # Basic auth credentials
 USERNAME = config.USER
 PASSWORD = config.PASSWORD
+
+# Configure logging to stderr
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
+handler = logging.StreamHandler(sys.stderr)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
 
 # Database models
 class VehicleAssignment(db.Model):
@@ -91,8 +101,7 @@ def get_assignments():
     ]
     return jsonify(result), 200
 
-
 if __name__ == '__main__':
     with app.app_context():
-      db.create_all()
+        db.create_all()
     app.run(debug=True)
